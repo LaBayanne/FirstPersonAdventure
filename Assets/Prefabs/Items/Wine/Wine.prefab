@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 193318585225262210}
   - component: {fileID: 4105926607114750779}
-  - component: {fileID: 244054689353125100}
   - component: {fileID: 5501713659331271295}
   m_Layer: 9
   m_Name: Wine
@@ -49,20 +48,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &244054689353125100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5556248024313359186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05b29e5319b4fad4b8cb2a3331f4cfe8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_name: Wine
-  m_icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!136 &5501713659331271295
 CapsuleCollider:
   m_ObjectHideFlags: 0

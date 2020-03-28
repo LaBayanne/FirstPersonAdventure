@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b29e5319b4fad4b8cb2a3331f4cfe8, type: 3}
+  m_Name: WineAbelcourtData
+  m_EditorClassIdentifier: 
+  m_name: Vin Abelcourt
+  m_icon: {fileID: 21300000, guid: 17eed5c66afc240adb201899c4537b06, type: 3}
+  m_maxNumberPerGroup: 10
+  m_physicalItem: {fileID: 4614957839357136828, guid: 8f77fcc335e46b347880b94d32e94b90,
+    type: 3}

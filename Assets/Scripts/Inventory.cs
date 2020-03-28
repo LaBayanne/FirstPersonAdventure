@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
+using System.Reflection;
 
 /// <summary>
 /// This class represents an inventory, which can be attached to anything in the game.
@@ -10,129 +12,143 @@ using System;
 /// </summary>
 public class Inventory : MonoBehaviour
 {
-    //We use both a List and a Dictionary cause dictionaries cannot be displayed
-    //in unity's inspector.
     [SerializeField]
-    protected List<ItemCount> items;
-    protected Dictionary<string, ItemCount> m_items;
+    protected ItemGroup[] m_items;
 
     [SerializeField]
-    protected int m_size;
-    protected int m_count;
+    protected GameObject m_inventoryUI;
+    [SerializeField]
+    protected Text m_textInventoryContent;
 
-    protected void Start()
-    {
-        //Copy the List in the dictionary
-        m_items = new Dictionary<string, ItemCount>();
+    [SerializeField]
+    protected GameObject m_itemsGO;
 
-        foreach(ItemCount item in items)
-        {
-            if(item != null && item.GetData() != null && item.GetCount() > 0)
-            {
-                m_items.Add(item.GetData().GetName(), item);
+    protected bool m_isInventoryOpen = false;
 
-                m_count += item.GetCount();
-            }
-
-        }
-
-        //resize the inventory if needing
-        if(m_count > m_size)
-        {
-            m_size = m_count;
-        }
-    }
 
     protected void Update()
     {
         if(Input.GetButtonDown("Inventory"))
         {
-            PrintInventory();
-        }
-    }
-
-    /// <summary>
-    /// This method allows to add an item to the inventory.
-    /// return true if we can add the item, else false.
-    /// </summary>
-    /// <param name="itemData">The item to add</param>
-    /// <returns></returns>
-
-    public bool AddItem(ItemData itemData)
-    {
-        if (m_count >= m_size)
-            return false;
-
-        if(m_items.ContainsKey(itemData.GetName()))
-        {
-            m_items[itemData.GetName()].IncreaseCount();
-        }
-        else
-        {
-            m_items.Add(itemData.GetName(), new ItemCount(itemData, 1));
-        }
-
-        return true;
-    }
-
-    /// <summary>
-    /// This method allows to remove an item from the inventory.
-    /// return true if the item was removed, else false.
-    /// </summary>
-    /// <param name="itemData"></param>
-    /// <returns></returns>
-    public bool RemoveItem(ItemData itemData)
-    {
-        if (m_items.ContainsKey(itemData.GetName()))
-        {
-            if(m_items[itemData.GetName()].DecreaseCount() == 0)
+            if(m_isInventoryOpen)
             {
-                m_items.Remove(itemData.GetName());
+                CloseInventory();
             }
-
-            return true;
+            else
+            {
+                OpenInventory();
+            }
         }
-
-        return false;
     }
 
-    public void PrintInventory()
+    //This method allows to add an item to the inventory.
+    //return the number of items we were unable to add.
+    public int AddItem(ItemGroup itemGroup)
     {
-        foreach (KeyValuePair<string, ItemCount> entry in m_items)
-        {
-            Debug.Log(entry.Value.GetData().GetName() + " : " + entry.Value.GetCount().ToString());
-        }
+        Debug.Log(itemGroup.GetItemData().GetName() + " added to inventory.");
+        return 0;
     }
+
+    
+    //This method allows to remove an item from the inventory.
+    //return the number of items we were unable to add.
+    public int RemoveItem(ItemGroup itemGroup)
+    {
+        return 0;
+    }
+
+
+    //Open the inventory and display it at the screen
+    public void OpenInventory()
+    {
+        m_isInventoryOpen = true;
+        m_inventoryUI.SetActive(true);
+
+        string textInventoryContent = "";
+
+        foreach(ItemGroup item in m_items)
+        {
+            if(item == null || item.GetItemData() == null)
+            {
+                textInventoryContent += "/";
+            }
+            else
+            {
+                textInventoryContent += item.GetItemData().GetName() + " (" + item.GetNumber() + ")";
+            }
+            textInventoryContent += "\n";
+        }
+
+        m_textInventoryContent.text = textInventoryContent;
+    }
+
+    //Close the inventory
+    public void CloseInventory()
+    {
+        m_isInventoryOpen = false;
+        m_inventoryUI.SetActive(false);
+    }
+
 }
 
+
 /// <summary>
-/// This class represents a certain number of a particular item.
+/// Represent a group of items, useful for items wich come in multiple copies
 /// </summary>
 [Serializable]
-public class ItemCount
+public class ItemGroup
 {
     [SerializeField]
-    protected ItemData m_data;
+    protected ItemData m_itemData;
     [SerializeField]
-    protected int m_count;
+    protected int m_number = 1;
 
-    [SerializeField]
-    public ItemCount(ItemData data, int count)
+    public ItemGroup(ItemData itemData, int number = 1)
     {
-        m_data = data;
-        m_count = count;
+        m_itemData = itemData;
+        m_number = number;
     }
 
-    public int IncreaseCount()
+    //Add a certain number of items to this group
+    //Return the number of items we were unable to add cause to the size max of the group
+    public int AddItems(int number)
     {
-        return m_count ++;
+        m_number += number;
+
+        int max = m_itemData.GetMaxNumberPerGroup();
+
+        if (m_number <= max)
+        {
+            return 0;
+        }
+
+        int rest = m_number - max;
+
+        m_number = max;
+
+        return rest;
+
     }
 
-    public int DecreaseCount()
+    //Remove a certain number of items from this group.
+    //Return the number of items we were unable to remove cause the current size of the current reach 0
+    public int RemoveItems(int number)
     {
-        return m_count--;
+        m_number -= number;
+
+        if(m_number <= 0)
+        {
+            int rest = -m_number;
+
+            m_number = 0;
+
+            return m_number;
+        }
+
+        return 0;
     }
-    
-    public ItemData GetData() { return m_data; }
-    public int GetCount() { return m_count; }
+
+    public ItemData GetItemData() { return m_itemData; }
+    public int GetNumber() { return m_number; }
+
 }

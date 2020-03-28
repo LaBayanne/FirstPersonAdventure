@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// This class represents the datas of an item, necessary to manage it in inventories
-/// </summary>
-public abstract class ItemData : MonoBehaviour
+public abstract class ItemData : ScriptableObject
 {
     [SerializeField]
     protected string m_name;
     [SerializeField]
     protected Sprite m_icon;
+    [SerializeField]
+    protected int m_maxNumberPerGroup;
+    [SerializeField]
+    protected GameObject m_physicalItem;//Representation of this item in the world
 
-    protected GameObject m_itemInWorld;//Representation of this item in the world
-
-    protected void Awake()
-    {
-        m_itemInWorld = gameObject;
-    }
-
-    public abstract bool Use(PlayerStats playerStats);
+    public abstract bool Use(GameObject player);
 
     public string GetName() { return m_name; }
+    public Sprite GetSprite() { return m_icon; }
+    public int GetMaxNumberPerGroup() { return m_maxNumberPerGroup; }
+    public GameObject GetPhysicalItem() { return m_physicalItem; }
+
 }

@@ -68,36 +68,30 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    protected bool Pick()
+    protected void Pick()
     {
         if (m_interactibleObject == null)//If there isn't an item to pick
         {
             Debug.Log("Interactible object = null");
-            return false;
+            return;
         }
 
-        ItemData itemData = m_interactibleObject.GetComponent<ItemData>();
+        ItemGroup itemGroup = m_interactibleObject.GetComponent<PickableItem>().GetItemGroup();
 
-        if(itemData == null)
+        if(itemGroup == null)
         {
-            Debug.Log("Unable to find Component of type ItemData");
-            return false;
+            Debug.Log("Unable to find Component of type ItemGroup");
+            return;
         }
 
-        //try to add the item to the inventory
-        if(m_inventory.AddItem(itemData) == false)//Unable to add item to inventory
+        //Add to inventory
+        m_inventory.AddItem(itemGroup);
+        
+        if(itemGroup.GetNumber() <= 0)
         {
-            Debug.Log("Cannot add item " + itemData.GetName() + " to inventory.");
-
-            return false;
+            Destroy(m_interactibleObject);
         }
-
-        //If item was added to inventory
-        Debug.Log(itemData.GetName() + " added to inventory.");
-
-        Destroy(m_interactibleObject);
-
-        return true;
+        
     }
 
     //This methods update the current interactible object in front of the player, and at range.
@@ -123,8 +117,18 @@ public class PlayerInteraction : MonoBehaviour
                     //Set the current type of the interactible object
                     m_interactionType = InteractionType.Pick;
 
+                    ItemGroup itemGroup = m_interactibleObject.GetComponent<PickableItem>().GetItemGroup();
+
                     //Set the informations on the panel
-                    m_interactibleObjectName.text = m_interactibleObject.GetComponent<ItemData>().GetName();
+                    m_interactibleObjectName.text = itemGroup.GetItemData().GetName();
+
+                    int number = itemGroup.GetNumber();
+
+                    if (number > 1)
+                    {
+                        m_interactibleObjectName.text += " (" + number.ToString() + ")";
+                    }
+
                     m_interactionName.text = m_pickName;
                 }
                 else

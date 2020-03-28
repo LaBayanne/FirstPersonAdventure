@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5150776296842713996}
   - component: {fileID: 9020388466218542133}
   - component: {fileID: 5196558672276557975}
-  - component: {fileID: 5780457793731190}
+  - component: {fileID: 5707738675897328912}
   m_Layer: 9
   m_Name: Bread
   m_TagString: Untagged
@@ -63,7 +63,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5780457793731190
+--- !u!114 &5707738675897328912
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,11 +72,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 634506006666347612}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24b6e02d2961a9d46871ef488f5289f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e538c1ccf4960a4995949a1ea5d91f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_name: Pain
-  m_icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_itemGroup:
+    m_itemData: {fileID: 11400000, guid: db676b113c2dbb548ad984ebd295a171, type: 2}
+    m_number: 1
 --- !u!1 &8565880081492291790
 GameObject:
   m_ObjectHideFlags: 0
